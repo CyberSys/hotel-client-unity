@@ -1,17 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ExampleGameController : MonoBehaviour
 {
   public ExampleServerListUI serverListUi;
 
+  public async void HandleHostLocal() {
+    Debug.Log("Hosting local server.");
+    var ok = await HotelClient.Instance.HostServer("Test", 3030, 16);
+    Debug.Log("Server registered.");
+  }
+
+  public void HandleSpawnRemote() {
+    Debug.Log("Spawning remote server.");
+  }
+
+  public void HandleRefreshList() {
+    Debug.Log("Refreshing server list.");
+    RefreshServerList();
+  }
+
+  public void HandleQuit() {
+    Application.Quit();
+  }
+
   async void Start() {
-    var hotel = HotelClient.Instance;
-    await hotel.WaitUntilInitialized();
-    Debug.Log("Hotel initialized!");
-    await hotel.HostServer("test", 3030, 12);
-    var servers = await hotel.ListServers();
+    await HotelClient.Instance.WaitUntilInitialized();
+    RefreshServerList();
+  }
+
+  async private void RefreshServerList() {
+    var servers = await HotelClient.Instance.ListServers();
     serverListUi.DisplayServers(servers);
   }
 }

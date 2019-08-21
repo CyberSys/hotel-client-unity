@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class ExampleServerListUI : MonoBehaviour
 {
+  private const string DYN_TEXT_NAME = "Dynamic text";
+
   // Text in scene to use as the prototype for factories.
   public Text prototypeText;
 
@@ -17,22 +19,29 @@ public class ExampleServerListUI : MonoBehaviour
     }
   }
 
-  void Start() {
+  async void Start() {
     prototypeText.gameObject.SetActive(false);
+    var buttons = GetComponentsInChildren<Button>();
+    await HotelClient.Instance.WaitUntilInitialized();
+    foreach (var button in buttons) {
+      button.interactable = true;
+    }
   }
 
   private void CleanUp() {
     // A recycle pattern would be better here.
     var textChildren = GetComponentsInChildren<Text>();
     foreach (var child in textChildren) {
-      Destroy(child.gameObject);
+      if (child.name == DYN_TEXT_NAME) {
+        Destroy(child.gameObject);
+      }
     }
   }
 
   private Text AddText(string label) {
     var obj = Instantiate(prototypeText.gameObject, transform);
     obj.SetActive(true);
-    obj.name = "Dynamic text";
+    obj.name = DYN_TEXT_NAME;
     var text = obj.GetComponent<Text>();
     text.text = label;
     return text;

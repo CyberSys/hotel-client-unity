@@ -39,6 +39,7 @@ public class HotelClient : MonoBehaviour
   {
     client = new ApiClient(masterServerUrl);
     await client.Initialize();
+    Debug.Log("Hotel client initialized.");
     initializedCompletionSource.SetResult(true);
   }
 
