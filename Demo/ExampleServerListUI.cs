@@ -11,7 +11,7 @@ public class ExampleServerListUI : MonoBehaviour
   // Text in scene to use as the prototype for factories.
   public Text prototypeText;
 
-  public void DisplayServers(Server[] servers) {
+  public void DisplayServers(GameServer[] servers) {
     CleanUp();
     foreach (var server in servers) {
       AddText(string.Format(

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExampleGameController : MonoBehaviour
 {
@@ -9,8 +10,12 @@ public class ExampleGameController : MonoBehaviour
 
   public async void HandleHostLocal() {
     Debug.Log("Hosting local server.");
-    var ok = await HotelClient.Instance.HostServer("Test", 3030, 16);
-    Debug.Log("Server registered.");
+    var hostedServer = await HotelClient.Instance.HostServer("Test", 3030, 16);
+    if (hostedServer != null) {
+      SceneManager.LoadScene("Game");
+    } else {
+      Debug.LogError("Unable to host server.");
+    }
   }
 
   public void HandleSpawnRemote() {
@@ -29,6 +34,10 @@ public class ExampleGameController : MonoBehaviour
   async void Start() {
     await HotelClient.Instance.WaitUntilInitialized();
     RefreshServerList();
+  }
+
+  void Awake() {
+    DontDestroyOnLoad(gameObject);
   }
 
   async private void RefreshServerList() {

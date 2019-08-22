@@ -12,11 +12,11 @@ namespace Api
   [Serializable]
   public class ListServersResponse
   {
-    public Server[] servers;
+    public GameServer[] servers;
   }
 
   [Serializable]
-  public class Server
+  public class GameServer
   {
     public int id;
     public string gameId;

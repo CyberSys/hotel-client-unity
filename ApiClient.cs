@@ -23,33 +23,33 @@ public class ApiClient
     }
   }
 
-  public async Task<Api.Server[]> ListServers(string gameId) {
+  public async Task<Api.GameServer[]> ListServers(string gameId) {
     var url = string.Format("/servers?gameId={0}", gameId);
     var response = await client.Get<Api.ListServersResponse>(url);
     return response.servers;
   }
 
-  public async Task<Api.Server> GetServer(string serverId) {
+  public async Task<Api.GameServer> GetServer(string serverId) {
     var url = string.Format("/servers/{0}", serverId);
-    var response = await client.Get<Api.Server>(url);
+    var response = await client.Get<Api.GameServer>(url);
     return response;
   }
 
-  public async Task<bool> CreateServer(Api.Server server) {
+  public async Task<Api.GameServer> CreateServer(Api.GameServer gameServerData) {
     var url = "/servers";
-    var response = await client.Post<Api.Server>(url, server);
+    var response = await client.Post<Api.GameServer>(url, gameServerData);
+    return response;
+  }
+
+  public async Task<bool> UpdateServer(Api.GameServer gameServerData) {
+    var url = string.Format("/servers/{0}", gameServerData.id);
+    var response = await client.Put<Api.GameServer>(url, gameServerData);
     return true;
   }
 
-  public async Task<bool> UpdateServer(Api.Server server) {
-    var url = string.Format("/servers/{0}", server.id);
-    var response = await client.Put<Api.Server>(url, server);
-    return true;
-  }
-
-  public async Task<bool> PingServer(Api.Server server) {
-    var url = string.Format("/servers/{0}/alive", server.id);
-    var response = await client.Post<Api.Server>(url);
+  public async Task<bool> PingServerAlive(int gameServerId) {
+    var url = string.Format("/servers/{0}", gameServerId);
+    var response = await client.Put<Api.GameServer>(url, new Api.GameServer());
     return true;
   }
 }
