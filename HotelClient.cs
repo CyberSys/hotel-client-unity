@@ -11,6 +11,7 @@ namespace Hotel {
   public class HotelClient : MonoBehaviour {
     public string masterServerUrl;
     public string gameId;
+    public int masterServerPingIntervalSeconds = 15;
 
     private ApiClient client;
     private TaskCompletionSource<bool> initializedCompletionSource = new TaskCompletionSource<bool>();
@@ -19,17 +20,17 @@ namespace Hotel {
       return await initializedCompletionSource.Task;
     }
 
-    public async Task<bool> HostServer(string name, int port, int maxPlayers) {
+    public async Task<RegisteredGameServer> HostServer(string name, int port, int maxPlayers) {
       // TODO: Figure out IP echo
-      var server = new GameServer();
-      server.name = name;
-      server.host = "localhost";
-      server.port = port;
-      server.maxPlayers = maxPlayers;
-      server.numPlayers = 0;
-      server.gameId = gameId;
-      await client.CreateServer(server);
-      return true;
+      var gameServer = new GameServer();
+      gameServer.name = name;
+      gameServer.host = "localhost";
+      gameServer.port = port;
+      gameServer.maxPlayers = maxPlayers;
+      gameServer.numPlayers = 0;
+      gameServer.gameId = gameId;
+      await client.CreateServer(gameServer);
+      return new RegisteredGameServer(client, gameServer, masterServerPingIntervalSeconds);
     }
 
     public async Task<GameServer[]> ListServers() {
