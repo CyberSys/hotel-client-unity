@@ -9,7 +9,7 @@ public class ExampleGameController : MonoBehaviour
 
   public async void HandleHostLocal() {
     Debug.Log("Hosting local server.");
-    var ok = await HotelClient.Instance.HostServer("Test", 3030, 16);
+    var ok = await Hotel.HotelClient.Instance.HostServer("Test", 3030, 16);
     Debug.Log("Server registered.");
   }
 
@@ -27,12 +27,12 @@ public class ExampleGameController : MonoBehaviour
   }
 
   async void Start() {
-    await HotelClient.Instance.WaitUntilInitialized();
+    await Hotel.HotelClient.Instance.WaitUntilInitialized();
     RefreshServerList();
   }
 
   async private void RefreshServerList() {
-    var servers = await HotelClient.Instance.ListServers();
+    var servers = await Hotel.HotelClient.Instance.ListServers();
     serverListUi.DisplayServers(servers);
   }
 }

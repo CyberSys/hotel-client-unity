@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Api;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +10,7 @@ public class ExampleServerListUI : MonoBehaviour
   // Text in scene to use as the prototype for factories.
   public Text prototypeText;
 
-  public void DisplayServers(Server[] servers) {
+  public void DisplayServers(Hotel.GameServer[] servers) {
     CleanUp();
     foreach (var server in servers) {
       AddText(string.Format(
@@ -22,7 +21,7 @@ public class ExampleServerListUI : MonoBehaviour
   async void Start() {
     prototypeText.gameObject.SetActive(false);
     var buttons = GetComponentsInChildren<Button>();
-    await HotelClient.Instance.WaitUntilInitialized();
+    await Hotel.HotelClient.Instance.WaitUntilInitialized();
     foreach (var button in buttons) {
       button.interactable = true;
     }

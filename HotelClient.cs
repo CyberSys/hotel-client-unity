@@ -6,55 +6,57 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 // Main entrypoint class to put in your scene.
-public class HotelClient : MonoBehaviour
-{
-  public string masterServerUrl;
-  public string gameId;
+namespace Hotel {
 
-  private ApiClient client;
-  private TaskCompletionSource<bool> initializedCompletionSource = new TaskCompletionSource<bool>();
+  public class HotelClient : MonoBehaviour {
+    public string masterServerUrl;
+    public string gameId;
 
-  public async Task<bool> WaitUntilInitialized() {
-    return await initializedCompletionSource.Task;
-  }
+    private ApiClient client;
+    private TaskCompletionSource<bool> initializedCompletionSource = new TaskCompletionSource<bool>();
 
-  public async Task<bool> HostServer(string name, int port, int maxPlayers) {
-    // TODO: Figure out IP echo
-    var server = new Api.Server();
-    server.name = name;
-    server.host = "localhost";
-    server.port = port;
-    server.maxPlayers = maxPlayers;
-    server.numPlayers = 0;
-    server.gameId = gameId;
-    await client.CreateServer(server);
-    return true;
-  }
+    public async Task<bool> WaitUntilInitialized() {
+      return await initializedCompletionSource.Task;
+    }
 
-  public async Task<Api.Server[]> ListServers() {
-    return await client.ListServers(gameId);
-  }
+    public async Task<bool> HostServer(string name, int port, int maxPlayers) {
+      // TODO: Figure out IP echo
+      var server = new GameServer();
+      server.name = name;
+      server.host = "localhost";
+      server.port = port;
+      server.maxPlayers = maxPlayers;
+      server.numPlayers = 0;
+      server.gameId = gameId;
+      await client.CreateServer(server);
+      return true;
+    }
 
-  async void Start()
-  {
-    client = new ApiClient(masterServerUrl);
-    await client.Initialize();
-    Debug.Log("Hotel client initialized.");
-    initializedCompletionSource.SetResult(true);
-  }
+    public async Task<GameServer[]> ListServers() {
+      return await client.ListServers(gameId);
+    }
 
-  void Awake() {
-    DontDestroyOnLoad(gameObject);
-  }
+    async void Start() {
+      client = new ApiClient(masterServerUrl);
+      await client.Initialize();
+      Debug.Log("Hotel client initialized.");
+      initializedCompletionSource.SetResult(true);
+    }
 
-  private static HotelClient _instance;
+    void Awake() {
+      DontDestroyOnLoad(gameObject);
+    }
 
-  public static HotelClient Instance {
-    get {
-      if (_instance == null) {
-        _instance = GameObject.FindObjectOfType<HotelClient>();
+    private static HotelClient _instance;
+
+    public static HotelClient Instance {
+      get {
+        if (_instance == null) {
+          _instance = FindObjectOfType<HotelClient>();
+        }
+        return _instance;
       }
-      return _instance;
     }
   }
-}
+
+} // namespace Hotel
