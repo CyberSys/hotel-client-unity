@@ -36,10 +36,10 @@ namespace Hotel {
       return response;
     }
 
-    public async Task<bool> CreateServer(GameServer server) {
+    public async Task<GameServer> CreateServer(GameServer server) {
       var url = "/servers";
       var response = await client.Post<GameServer>(url, server);
-      return true;
+      return response;
     }
 
     public async Task<bool> UpdateServer(GameServer server) {

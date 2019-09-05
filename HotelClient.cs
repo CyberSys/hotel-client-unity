@@ -29,8 +29,8 @@ namespace Hotel {
       gameServer.maxPlayers = maxPlayers;
       gameServer.numPlayers = 0;
       gameServer.gameId = gameId;
-      await client.CreateServer(gameServer);
-      return new RegisteredGameServer(client, gameServer, masterServerPingIntervalSeconds);
+      var newServer = await client.CreateServer(gameServer);
+      return new RegisteredGameServer(client, newServer, masterServerPingIntervalSeconds);
     }
 
     public async Task<GameServer[]> ListServers() {
