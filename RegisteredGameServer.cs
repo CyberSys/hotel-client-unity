@@ -6,6 +6,7 @@ namespace Hotel {
   /// A reference to an active game server which is registered with the hotel
   /// master server.
   public class RegisteredGameServer {
+    private bool alive = true;
     private ApiClient apiClient;
     private GameServer gameServerData;
     private DateTime lastUpdateTimestamp = DateTime.MinValue;
@@ -22,6 +23,10 @@ namespace Hotel {
       SendUpdate();
     }
 
+    public void Destroy() {
+      alive = false;
+    }
+
     private async Task SendUpdate() {
       UnityEngine.Debug.Log("Sending master server ping");
       var ok = await apiClient.UpdateServer(gameServerData);
@@ -31,7 +36,7 @@ namespace Hotel {
     }
 
     private async Task StartUpdateLoop(int pingIntervalSeconds) {
-      while (true) {
+      while (alive) {
         if (DateTime.Now.Subtract(lastUpdateTimestamp).Seconds > pingIntervalSeconds) {
           await SendUpdate();
         }
