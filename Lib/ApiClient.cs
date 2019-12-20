@@ -8,11 +8,9 @@ namespace Hotel {
 
   internal class ApiClient {
     private JsonHttpClient client;
-    private string baseHost;
 
     public ApiClient(string baseHost) {
-      this.client = new JsonHttpClient(new System.Uri(baseHost));
-      this.baseHost = baseHost;
+      client = new JsonHttpClient(new System.Uri(baseHost));
     }
 
     public async Task Initialize() {

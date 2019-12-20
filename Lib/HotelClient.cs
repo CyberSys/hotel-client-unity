@@ -5,67 +5,70 @@ using System.Net;
 using System.Threading.Tasks;
 using UnityEngine;
 
-/// Main entrypoint class to put in your scene.
-public class HotelClient : MonoBehaviour
-{
-  public string masterServerUrl;
-  public string gameId;
-  
-  [Range(1, 60)]
-  public int alivePingIntervalSeconds = 20;
+namespace Hotel {
 
-  private ApiClient client;
-  private TaskCompletionSource<bool> initializedCompletionSource = new TaskCompletionSource<bool>();
-  private HostedGameServer activeHostedServer;
+  /// Main entrypoint class to put in your scene.
+  public class HotelClient : MonoBehaviour {
+    public string masterServerUrl;
+    public string gameId;
 
-  /// Returns true once the hotel client is fully initialized.
-  public async Task<bool> WaitUntilInitialized() {
-    return await initializedCompletionSource.Task;
-  }
+    [Range(1, 60)]
+    public int alivePingIntervalSeconds = 20;
 
-  /// Informs the master server that this instance of unity is acting as a server host for this game.
-  public async Task<HostedGameServer> StartHostingServer(string host, int port, int maxPlayers, string serverName) {
-    var gameServerData = new Api.GameServer();
-    gameServerData.host = host;
-    gameServerData.port = port;
-    gameServerData.name = serverName;
-    gameServerData.maxPlayers = maxPlayers;
-    gameServerData.numPlayers = 0;
-    gameServerData.gameId = gameId;
-    gameServerData = await client.CreateServer(gameServerData);
-    activeHostedServer = new HostedGameServer(gameServerData, client, alivePingIntervalSeconds);
-    return activeHostedServer;
-  }
+    private ApiClient client;
+    private TaskCompletionSource<bool> initializedCompletionSource = new TaskCompletionSource<bool>();
+    private RegisteredGameServer activeHostedServer;
 
-  /// Host the server with an implicit hostname based on public IP.
-  public async Task<HostedGameServer> StartHostingServer(int port, int maxPlayers, string serverName) {
-    return await StartHostingServer(null, port, maxPlayers, serverName);
-  }
+    /// Returns true once the hotel client is fully initialized.
+    public async Task<bool> WaitUntilInitialized() {
+      return await initializedCompletionSource.Task;
+    }
 
-  /// Lists the currently running servers for this game.
-  public async Task<Api.GameServer[]> ListGameServers() {
-    return await client.ListServers(gameId);
-  }
+    /// Informs the master server that this instance of unity is acting as a server host for this game.
+    public async Task<RegisteredGameServer> StartHostingServer(string host, int port, int maxPlayers, string serverName) {
+      var gameServerData = new GameServer();
+      gameServerData.host = host;
+      gameServerData.port = port;
+      gameServerData.name = serverName;
+      gameServerData.maxPlayers = maxPlayers;
+      gameServerData.numPlayers = 0;
+      gameServerData.gameId = gameId;
+      gameServerData = await client.CreateServer(gameServerData);
+      activeHostedServer = new RegisteredGameServer(client, gameServerData, alivePingIntervalSeconds);
+      return activeHostedServer;
+    }
 
-  async void Start() {
-    client = new ApiClient(masterServerUrl);
-    await client.Initialize();
-    Debug.Log("Hotel client initialized.");
-    initializedCompletionSource.SetResult(true);
-  }
+    /// Host the server with an implicit hostname based on public IP.
+    public async Task<RegisteredGameServer> StartHostingServer(int port, int maxPlayers, string serverName) {
+      return await StartHostingServer(null, port, maxPlayers, serverName);
+    }
 
-  void Awake() {
-    DontDestroyOnLoad(gameObject);
-  }
+    /// Lists the currently running servers for this game.
+    public async Task<GameServer[]> ListGameServers() {
+      return await client.ListServers(gameId);
+    }
 
-  private static HotelClient _instance;
+    async void Start() {
+      client = new ApiClient(masterServerUrl);
+      await client.Initialize();
+      Debug.Log("Hotel client initialized.");
+      initializedCompletionSource.SetResult(true);
+    }
 
-  public static HotelClient Instance {
-    get {
-      if (_instance == null) {
-        _instance = GameObject.FindObjectOfType<HotelClient>();
+    void Awake() {
+      DontDestroyOnLoad(gameObject);
+    }
+
+    private static HotelClient _instance;
+
+    public static HotelClient Instance {
+      get {
+        if (_instance == null) {
+          _instance = GameObject.FindObjectOfType<HotelClient>();
+        }
+        return _instance;
       }
-      return _instance;
     }
   }
-}
+
+} // namespace Hotel
