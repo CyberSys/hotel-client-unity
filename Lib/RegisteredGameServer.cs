@@ -23,7 +23,9 @@ namespace Hotel {
       SendUpdate();
     }
 
+    // Unregister the server. This instance should not be used after this.
     public void Destroy() {
+      apiClient.DeleteServer(gameServerData);
       alive = false;
     }
 

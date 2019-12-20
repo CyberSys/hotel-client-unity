@@ -34,6 +34,10 @@ namespace Hotel {
       return await Send<T>(HttpMethod.Put, url, request);
     }
 
+    public async Task<T> Delete<T>(string url) {
+      return await Send<T>(HttpMethod.Delete, url, null);
+    }
+
     public async Task<T> Send<T>(HttpMethod method, string url, System.Object request) {
       var httpRequest = new HttpRequestMessage(method, url);
       if (sessionToken != null) {

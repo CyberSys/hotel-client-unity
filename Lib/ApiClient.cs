@@ -46,6 +46,12 @@ namespace Hotel {
       return true;
     }
 
+    public async Task<bool> DeleteServer(GameServer server) {
+      var url = string.Format("/servers/{0}", server.id);
+      var response = await client.Delete<GameServer>(url);
+      return true;
+    }
+
     public async Task<bool> PingServer(GameServer server) {
       var url = string.Format("/servers/{0}/alive", server.id);
       var response = await client.Post<GameServer>(url);
