@@ -15,6 +15,8 @@ namespace Hotel {
     [Range(1, 60)]
     public int alivePingIntervalSeconds = 20;
 
+    private const string HOTEL_MASTER_ADDRESS_FLAG = "--hotel_master_address";
+
     private ApiClient client;
     private TaskCompletionSource<bool> initializedCompletionSource = new TaskCompletionSource<bool>();
     private RegisteredGameServer activeHostedServer;
@@ -49,7 +51,9 @@ namespace Hotel {
     }
 
     async void Start() {
-      client = new ApiClient(masterServerUrl);
+      var masterUrl = ResolveMasterServerUrl();
+      client = new ApiClient(masterUrl);
+      Debug.Log($"Contacting hotel master server at {masterUrl}");
       await client.Initialize();
       Debug.Log("Hotel client initialized.");
       initializedCompletionSource.SetResult(true);
@@ -57,6 +61,14 @@ namespace Hotel {
 
     void Awake() {
       DontDestroyOnLoad(gameObject);
+    }
+
+    private string ResolveMasterServerUrl() {
+      var flagUrl = Util.GetFlagValue(HOTEL_MASTER_ADDRESS_FLAG);
+      if (string.IsNullOrEmpty(flagUrl)) {
+        return masterServerUrl;
+      }
+      return flagUrl;
     }
 
     private static HotelClient _instance;

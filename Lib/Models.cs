@@ -21,6 +21,10 @@ namespace Hotel {
     public int port;
     public int numPlayers;
     public int maxPlayers;
+
+    public override string ToString() {
+      return $"GameServer: {name}, {host}:{port}, {numPlayers}/{maxPlayers}";
+    }
   }
 
 } // namespace Hotel
