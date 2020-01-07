@@ -47,10 +47,12 @@ namespace Hotel {
         httpRequest.Content = new StringContent(JsonUtility.ToJson(request));
       }
       var httpResponse = await client.SendAsync(httpRequest);
+      var content = await httpResponse.Content.ReadAsStringAsync();
       if (httpResponse.StatusCode != HttpStatusCode.OK) {
         Debug.LogWarning(string.Format("Unexpected status code for path {0}: {1}", url, httpResponse.StatusCode));
+        Debug.LogWarning($"Response content: {content}");
       }
-      var content = await httpResponse.Content.ReadAsStringAsync();
+
       return JsonUtility.FromJson<T>(content);
     }
   }

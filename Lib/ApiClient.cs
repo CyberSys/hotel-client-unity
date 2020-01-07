@@ -52,6 +52,12 @@ namespace Hotel {
       return true;
     }
 
+    public async Task<GameServer> SpawnServer(string gameId) {
+      var url = string.Format("/spawn?gameId={0}", gameId);
+      var response = await client.Post<GameServer>(url);
+      return response;
+    }
+
     public async Task<bool> PingServer(GameServer server) {
       var url = string.Format("/servers/{0}/alive", server.id);
       var response = await client.Post<GameServer>(url);

@@ -50,6 +50,11 @@ namespace Hotel {
       return await client.ListServers(gameId);
     }
 
+    /// Requests that a new server be spawned.
+    public async Task<GameServer> RequestServerSpawn() {
+      return await client.SpawnServer(gameId);
+    }
+
     async void Start() {
       var masterUrl = ResolveMasterServerUrl();
       client = new ApiClient(masterUrl);
