@@ -14,6 +14,7 @@ namespace Hotel {
     internal RegisteredGameServer(ApiClient apiClient, GameServer gameServerData, int pingIntervalSeconds) {
       this.apiClient = apiClient;
       this.gameServerData = gameServerData;
+      lastUpdateTimestamp = DateTime.Now;
 
       StartUpdateLoop(pingIntervalSeconds);
     }
