@@ -3,28 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
-public class ConsoleLog : MonoBehaviour
-{
-  private Text textComponent;
+namespace Hotel {
 
-  void Start() {
-    textComponent = GetComponent<Text>();
-  }
+  [RequireComponent(typeof(Text))]
+  public class ConsoleLog : MonoBehaviour {
+    private Text textComponent;
 
-  void OnEnable() {
-    Application.logMessageReceived += HandleLogMessage;
-  }
-
-  void OnDisable() {
-    Application.logMessageReceived -= HandleLogMessage;
-  }
-
-  private void HandleLogMessage(string log, string stack, LogType type) {
-    if (textComponent == null) {
-      return;
+    void Start() {
+      textComponent = GetComponent<Text>();
     }
 
-    textComponent.text = textComponent.text + "\n" + log;
+    void OnEnable() {
+      Application.logMessageReceived += HandleLogMessage;
+    }
+
+    void OnDisable() {
+      Application.logMessageReceived -= HandleLogMessage;
+    }
+
+    private void HandleLogMessage(string log, string stack, LogType type) {
+      if (textComponent == null) {
+        return;
+      }
+
+      textComponent.text = textComponent.text + "\n" + log;
+    }
   }
-}
+
+} // namespace Hotel
