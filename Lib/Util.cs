@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Hotel {
+﻿namespace Hotel {
 
   public static class Util {
     public static string GetFlagValue(string flagName) {
