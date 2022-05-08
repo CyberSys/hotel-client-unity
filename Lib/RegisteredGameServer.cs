@@ -19,14 +19,14 @@ namespace Hotel {
       StartUpdateLoop(pingIntervalSeconds);
     }
 
-    public void UpdateNumPlayers(int numPlayers) {
+    public async void UpdateNumPlayers(int numPlayers) {
       gameServerData.numPlayers = numPlayers;
-      SendUpdate();
+      await SendUpdate();
     }
 
     // Unregister the server. This instance should not be used after this.
-    public void Destroy() {
-      apiClient.DeleteServer(gameServerData);
+    public async void Destroy() {
+      await apiClient.DeleteServer(gameServerData);
       alive = false;
     }
 
@@ -38,7 +38,7 @@ namespace Hotel {
       }
     }
 
-    private async Task StartUpdateLoop(int pingIntervalSeconds) {
+    private async void StartUpdateLoop(int pingIntervalSeconds) {
       while (alive) {
         if (DateTime.Now.Subtract(lastUpdateTimestamp).Seconds > pingIntervalSeconds) {
           await SendUpdate();
