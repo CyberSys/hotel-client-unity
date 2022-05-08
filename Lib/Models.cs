@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace Hotel {
 
@@ -21,6 +22,14 @@ namespace Hotel {
     public int port;
     public int numPlayers;
     public int maxPlayers;
+
+    public IPEndPoint ResolveIPEndPoint() {
+      var addresses = Dns.GetHostAddresses(host);
+      if (addresses.Length < 1) {
+        throw new ArgumentException("Unable to resolve host " + host);
+      }
+      return new IPEndPoint(addresses[0], port);
+    }
 
     public override string ToString() {
       return $"GameServer: {name}, {host}:{port}, {numPlayers}/{maxPlayers}";
