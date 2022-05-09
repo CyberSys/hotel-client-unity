@@ -31,7 +31,6 @@ namespace Hotel {
     }
 
     private async Task SendUpdate() {
-      UnityEngine.Debug.Log("Sending master server ping");
       var ok = await apiClient.UpdateServer(gameServerData);
       if (ok) {
         lastUpdateTimestamp = DateTime.Now;
