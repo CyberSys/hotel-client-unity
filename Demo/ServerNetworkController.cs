@@ -37,11 +37,11 @@ namespace Hotel {
     }
 
     public void OnPeerConnected(NetPeer peer) {
-      Debug.Log("Peer connected: " + peer.EndPoint);
+      Debug.Log("Peer connected: " + peer.Address);
     }
 
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo) {
-      Debug.Log("Peer disconnected: " + peer.EndPoint);
+      Debug.Log("Peer disconnected: " + peer.Address);
     }
 
     public void OnNetworkError(IPEndPoint endPoint, SocketError socketError) {
@@ -52,7 +52,7 @@ namespace Hotel {
       lastLatency = latency;
     }
 
-    public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod) {
+    public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channelNumber, DeliveryMethod deliveryMethod) {
       Debug.Log("Network recv");
     }
 
